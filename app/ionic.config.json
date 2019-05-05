@@ -1,0 +1,7 @@
+{
+  "name": "Maestra count training",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
