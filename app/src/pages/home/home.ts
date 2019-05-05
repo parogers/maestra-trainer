@@ -271,17 +271,22 @@ export class HomePage
         }
     }
 
-    private saveRecording(comment: string, recorder: SampleRecorder)
+    /* Saves the current recording in progress */
+    private saveCurrentRecording(comment: string)
     {
-        return this.recordingStorage.save({
-            timestamp: this.recorder.startTime,
-            samples: this.recorder.samples,
-            comment: comment,
-        }).catch(error => {
+        if (!this.isRecording) {
+            return;
+        }
+        return this.recordingStorage.save(
+            this.recorder.startTime,
+            this.recorder.samples,
+            comment,
+        ).catch(error => {
             console.log('error saving:', error);
         });
     }
 
+    /* Stops any recording currently in progress */
     private stopRecording() {
         this.recorder = null;
         this.window.clear();
@@ -290,10 +295,10 @@ export class HomePage
 
     handleStopClicked()
     {
+        // Prompt the user to save the recording (with comment)
         let handleSave = (args) => {
-            this.saveRecording(
+            this.saveCurrentRecording(
                 args.comment,
-                this.recorder,
             ).then(() => {
                 this.stopRecording();
             });
