@@ -2,6 +2,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Chart } from 'chart.js';
+import { RecordingStorageProvider } from '../../providers/recording-storage';
 
 /* Returns the current time in seconds */
 function getTime() {
@@ -85,7 +86,10 @@ export class HomePage
     private data: any;
     private avgData: any;
 
-    constructor(public navCtrl: NavController)
+    constructor(
+        private navCtrl: NavController,
+        private recordingStorage: RecordingStorageProvider,
+    )
     {
         this.window = new SlidingWindow({
             sampleLength: 4,
