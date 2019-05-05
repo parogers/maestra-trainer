@@ -17,7 +17,7 @@ webpackEmptyAsyncContext.id = 109;
 
 /***/ }),
 
-/***/ 150:
+/***/ 152:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -30,19 +30,19 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 150;
+webpackEmptyAsyncContext.id = 152;
 
 /***/ }),
 
-/***/ 194:
+/***/ 196:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__about_about__ = __webpack_require__(195);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__review_review__ = __webpack_require__(196);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__home_home__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__about_about__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__review_review__ = __webpack_require__(198);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__home_home__ = __webpack_require__(199);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -74,7 +74,7 @@ var TabsPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 195:
+/***/ 197:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -109,7 +109,7 @@ var AboutPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 196:
+/***/ 198:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -144,16 +144,16 @@ var ReviewPage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 197:
+/***/ 199:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chart_js__ = __webpack_require__(399);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chart_js__ = __webpack_require__(403);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chart_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_chart_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_recording_storage__ = __webpack_require__(409);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_recording_storage__ = __webpack_require__(327);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -300,6 +300,16 @@ var HomePage = /** @class */ (function () {
             }
         };
         document.addEventListener('keyup', this.keyHandler);
+        this.recordingStorage.loadAll().then(function (recordings) {
+            console.log('loaded recordings:', recordings);
+        });
+        this.recordingStorage.save({
+            timestamp: 0,
+            samples: [1, 2, 3],
+            comment: 'This is a test',
+        }).catch(function (error) {
+            console.log('error saving:', error);
+        });
         /*let tick = () => {
             setTimeout(tick, 500);
         }
@@ -358,13 +368,75 @@ var HomePage = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 325:
+/***/ 327:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RecordingStorageProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_storage__ = __webpack_require__(110);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var RECORDING_PREFIX = 'RS_RECORD_';
+function makeKey(rec) {
+    return RECORDING_PREFIX + (rec.timestamp | 0);
+}
+var RecordingStorageProvider = /** @class */ (function () {
+    function RecordingStorageProvider(storage) {
+        this.storage = storage;
+    }
+    /* Saves a recording into local storage, using the recording timestamp to
+     * uniquely identify the record. (or updates the record if it already
+     * exists) Returns a promise that resolves to 'true' on success. */
+    RecordingStorageProvider.prototype.save = function (rec) {
+        return this.storage.set(makeKey(rec), JSON.stringify(rec)).then(function () {
+            return true;
+        });
+    };
+    RecordingStorageProvider.prototype.loadAll = function () {
+        var recordings = [];
+        return this.storage.forEach(function (value, key) {
+            if (key.startsWith(RECORDING_PREFIX)) {
+                recordings.push(value);
+            }
+        }).then(function () {
+            return recordings;
+        }).catch(function (error) {
+            console.log('error loading recordings:', error);
+            return [];
+        });
+    };
+    RecordingStorageProvider.prototype.clear = function () {
+        this.storage.clear();
+    };
+    RecordingStorageProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ionic_storage__["b" /* Storage */]) === "function" && _a || Object])
+    ], RecordingStorageProvider);
+    return RecordingStorageProvider;
+    var _a;
+}());
+
+//# sourceMappingURL=recording-storage.js.map
+
+/***/ }),
+
+/***/ 328:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(326);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(348);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(329);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(351);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -372,23 +444,23 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 348:
+/***/ 351:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_storage__ = __webpack_require__(411);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_storage__ = __webpack_require__(110);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(391);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_about_about__ = __webpack_require__(195);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_review_review__ = __webpack_require__(196);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(197);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_tabs_tabs__ = __webpack_require__(194);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_status_bar__ = __webpack_require__(190);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_splash_screen__ = __webpack_require__(193);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_recording_storage__ = __webpack_require__(409);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_component__ = __webpack_require__(395);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_about_about__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_review_review__ = __webpack_require__(198);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(199);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__pages_tabs_tabs__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_status_bar__ = __webpack_require__(192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_splash_screen__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_recording_storage__ = __webpack_require__(327);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -452,16 +524,16 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 391:
+/***/ 395:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(190);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(193);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_tabs_tabs__ = __webpack_require__(194);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_tabs_tabs__ = __webpack_require__(196);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -500,264 +572,264 @@ var MyApp = /** @class */ (function () {
 
 /***/ }),
 
-/***/ 401:
+/***/ 405:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 198,
-	"./af.js": 198,
-	"./ar": 199,
-	"./ar-dz": 200,
-	"./ar-dz.js": 200,
-	"./ar-kw": 201,
-	"./ar-kw.js": 201,
-	"./ar-ly": 202,
-	"./ar-ly.js": 202,
-	"./ar-ma": 203,
-	"./ar-ma.js": 203,
-	"./ar-sa": 204,
-	"./ar-sa.js": 204,
-	"./ar-tn": 205,
-	"./ar-tn.js": 205,
-	"./ar.js": 199,
-	"./az": 206,
-	"./az.js": 206,
-	"./be": 207,
-	"./be.js": 207,
-	"./bg": 208,
-	"./bg.js": 208,
-	"./bm": 209,
-	"./bm.js": 209,
-	"./bn": 210,
-	"./bn.js": 210,
-	"./bo": 211,
-	"./bo.js": 211,
-	"./br": 212,
-	"./br.js": 212,
-	"./bs": 213,
-	"./bs.js": 213,
-	"./ca": 214,
-	"./ca.js": 214,
-	"./cs": 215,
-	"./cs.js": 215,
-	"./cv": 216,
-	"./cv.js": 216,
-	"./cy": 217,
-	"./cy.js": 217,
-	"./da": 218,
-	"./da.js": 218,
-	"./de": 219,
-	"./de-at": 220,
-	"./de-at.js": 220,
-	"./de-ch": 221,
-	"./de-ch.js": 221,
-	"./de.js": 219,
-	"./dv": 222,
-	"./dv.js": 222,
-	"./el": 223,
-	"./el.js": 223,
-	"./en-SG": 224,
-	"./en-SG.js": 224,
-	"./en-au": 225,
-	"./en-au.js": 225,
-	"./en-ca": 226,
-	"./en-ca.js": 226,
-	"./en-gb": 227,
-	"./en-gb.js": 227,
-	"./en-ie": 228,
-	"./en-ie.js": 228,
-	"./en-il": 229,
-	"./en-il.js": 229,
-	"./en-nz": 230,
-	"./en-nz.js": 230,
-	"./eo": 231,
-	"./eo.js": 231,
-	"./es": 232,
-	"./es-do": 233,
-	"./es-do.js": 233,
-	"./es-us": 234,
-	"./es-us.js": 234,
-	"./es.js": 232,
-	"./et": 235,
-	"./et.js": 235,
-	"./eu": 236,
-	"./eu.js": 236,
-	"./fa": 237,
-	"./fa.js": 237,
-	"./fi": 238,
-	"./fi.js": 238,
-	"./fo": 239,
-	"./fo.js": 239,
-	"./fr": 240,
-	"./fr-ca": 241,
-	"./fr-ca.js": 241,
-	"./fr-ch": 242,
-	"./fr-ch.js": 242,
-	"./fr.js": 240,
-	"./fy": 243,
-	"./fy.js": 243,
-	"./ga": 244,
-	"./ga.js": 244,
-	"./gd": 245,
-	"./gd.js": 245,
-	"./gl": 246,
-	"./gl.js": 246,
-	"./gom-latn": 247,
-	"./gom-latn.js": 247,
-	"./gu": 248,
-	"./gu.js": 248,
-	"./he": 249,
-	"./he.js": 249,
-	"./hi": 250,
-	"./hi.js": 250,
-	"./hr": 251,
-	"./hr.js": 251,
-	"./hu": 252,
-	"./hu.js": 252,
-	"./hy-am": 253,
-	"./hy-am.js": 253,
-	"./id": 254,
-	"./id.js": 254,
-	"./is": 255,
-	"./is.js": 255,
-	"./it": 256,
-	"./it-ch": 257,
-	"./it-ch.js": 257,
-	"./it.js": 256,
-	"./ja": 258,
-	"./ja.js": 258,
-	"./jv": 259,
-	"./jv.js": 259,
-	"./ka": 260,
-	"./ka.js": 260,
-	"./kk": 261,
-	"./kk.js": 261,
-	"./km": 262,
-	"./km.js": 262,
-	"./kn": 263,
-	"./kn.js": 263,
-	"./ko": 264,
-	"./ko.js": 264,
-	"./ku": 265,
-	"./ku.js": 265,
-	"./ky": 266,
-	"./ky.js": 266,
-	"./lb": 267,
-	"./lb.js": 267,
-	"./lo": 268,
-	"./lo.js": 268,
-	"./lt": 269,
-	"./lt.js": 269,
-	"./lv": 270,
-	"./lv.js": 270,
-	"./me": 271,
-	"./me.js": 271,
-	"./mi": 272,
-	"./mi.js": 272,
-	"./mk": 273,
-	"./mk.js": 273,
-	"./ml": 274,
-	"./ml.js": 274,
-	"./mn": 275,
-	"./mn.js": 275,
-	"./mr": 276,
-	"./mr.js": 276,
-	"./ms": 277,
-	"./ms-my": 278,
-	"./ms-my.js": 278,
-	"./ms.js": 277,
-	"./mt": 279,
-	"./mt.js": 279,
-	"./my": 280,
-	"./my.js": 280,
-	"./nb": 281,
-	"./nb.js": 281,
-	"./ne": 282,
-	"./ne.js": 282,
-	"./nl": 283,
-	"./nl-be": 284,
-	"./nl-be.js": 284,
-	"./nl.js": 283,
-	"./nn": 285,
-	"./nn.js": 285,
-	"./pa-in": 286,
-	"./pa-in.js": 286,
-	"./pl": 287,
-	"./pl.js": 287,
-	"./pt": 288,
-	"./pt-br": 289,
-	"./pt-br.js": 289,
-	"./pt.js": 288,
-	"./ro": 290,
-	"./ro.js": 290,
-	"./ru": 291,
-	"./ru.js": 291,
-	"./sd": 292,
-	"./sd.js": 292,
-	"./se": 293,
-	"./se.js": 293,
-	"./si": 294,
-	"./si.js": 294,
-	"./sk": 295,
-	"./sk.js": 295,
-	"./sl": 296,
-	"./sl.js": 296,
-	"./sq": 297,
-	"./sq.js": 297,
-	"./sr": 298,
-	"./sr-cyrl": 299,
-	"./sr-cyrl.js": 299,
-	"./sr.js": 298,
-	"./ss": 300,
-	"./ss.js": 300,
-	"./sv": 301,
-	"./sv.js": 301,
-	"./sw": 302,
-	"./sw.js": 302,
-	"./ta": 303,
-	"./ta.js": 303,
-	"./te": 304,
-	"./te.js": 304,
-	"./tet": 305,
-	"./tet.js": 305,
-	"./tg": 306,
-	"./tg.js": 306,
-	"./th": 307,
-	"./th.js": 307,
-	"./tl-ph": 308,
-	"./tl-ph.js": 308,
-	"./tlh": 309,
-	"./tlh.js": 309,
-	"./tr": 310,
-	"./tr.js": 310,
-	"./tzl": 311,
-	"./tzl.js": 311,
-	"./tzm": 312,
-	"./tzm-latn": 313,
-	"./tzm-latn.js": 313,
-	"./tzm.js": 312,
-	"./ug-cn": 314,
-	"./ug-cn.js": 314,
-	"./uk": 315,
-	"./uk.js": 315,
-	"./ur": 316,
-	"./ur.js": 316,
-	"./uz": 317,
-	"./uz-latn": 318,
-	"./uz-latn.js": 318,
-	"./uz.js": 317,
-	"./vi": 319,
-	"./vi.js": 319,
-	"./x-pseudo": 320,
-	"./x-pseudo.js": 320,
-	"./yo": 321,
-	"./yo.js": 321,
-	"./zh-cn": 322,
-	"./zh-cn.js": 322,
-	"./zh-hk": 323,
-	"./zh-hk.js": 323,
-	"./zh-tw": 324,
-	"./zh-tw.js": 324
+	"./af": 200,
+	"./af.js": 200,
+	"./ar": 201,
+	"./ar-dz": 202,
+	"./ar-dz.js": 202,
+	"./ar-kw": 203,
+	"./ar-kw.js": 203,
+	"./ar-ly": 204,
+	"./ar-ly.js": 204,
+	"./ar-ma": 205,
+	"./ar-ma.js": 205,
+	"./ar-sa": 206,
+	"./ar-sa.js": 206,
+	"./ar-tn": 207,
+	"./ar-tn.js": 207,
+	"./ar.js": 201,
+	"./az": 208,
+	"./az.js": 208,
+	"./be": 209,
+	"./be.js": 209,
+	"./bg": 210,
+	"./bg.js": 210,
+	"./bm": 211,
+	"./bm.js": 211,
+	"./bn": 212,
+	"./bn.js": 212,
+	"./bo": 213,
+	"./bo.js": 213,
+	"./br": 214,
+	"./br.js": 214,
+	"./bs": 215,
+	"./bs.js": 215,
+	"./ca": 216,
+	"./ca.js": 216,
+	"./cs": 217,
+	"./cs.js": 217,
+	"./cv": 218,
+	"./cv.js": 218,
+	"./cy": 219,
+	"./cy.js": 219,
+	"./da": 220,
+	"./da.js": 220,
+	"./de": 221,
+	"./de-at": 222,
+	"./de-at.js": 222,
+	"./de-ch": 223,
+	"./de-ch.js": 223,
+	"./de.js": 221,
+	"./dv": 224,
+	"./dv.js": 224,
+	"./el": 225,
+	"./el.js": 225,
+	"./en-SG": 226,
+	"./en-SG.js": 226,
+	"./en-au": 227,
+	"./en-au.js": 227,
+	"./en-ca": 228,
+	"./en-ca.js": 228,
+	"./en-gb": 229,
+	"./en-gb.js": 229,
+	"./en-ie": 230,
+	"./en-ie.js": 230,
+	"./en-il": 231,
+	"./en-il.js": 231,
+	"./en-nz": 232,
+	"./en-nz.js": 232,
+	"./eo": 233,
+	"./eo.js": 233,
+	"./es": 234,
+	"./es-do": 235,
+	"./es-do.js": 235,
+	"./es-us": 236,
+	"./es-us.js": 236,
+	"./es.js": 234,
+	"./et": 237,
+	"./et.js": 237,
+	"./eu": 238,
+	"./eu.js": 238,
+	"./fa": 239,
+	"./fa.js": 239,
+	"./fi": 240,
+	"./fi.js": 240,
+	"./fo": 241,
+	"./fo.js": 241,
+	"./fr": 242,
+	"./fr-ca": 243,
+	"./fr-ca.js": 243,
+	"./fr-ch": 244,
+	"./fr-ch.js": 244,
+	"./fr.js": 242,
+	"./fy": 245,
+	"./fy.js": 245,
+	"./ga": 246,
+	"./ga.js": 246,
+	"./gd": 247,
+	"./gd.js": 247,
+	"./gl": 248,
+	"./gl.js": 248,
+	"./gom-latn": 249,
+	"./gom-latn.js": 249,
+	"./gu": 250,
+	"./gu.js": 250,
+	"./he": 251,
+	"./he.js": 251,
+	"./hi": 252,
+	"./hi.js": 252,
+	"./hr": 253,
+	"./hr.js": 253,
+	"./hu": 254,
+	"./hu.js": 254,
+	"./hy-am": 255,
+	"./hy-am.js": 255,
+	"./id": 256,
+	"./id.js": 256,
+	"./is": 257,
+	"./is.js": 257,
+	"./it": 258,
+	"./it-ch": 259,
+	"./it-ch.js": 259,
+	"./it.js": 258,
+	"./ja": 260,
+	"./ja.js": 260,
+	"./jv": 261,
+	"./jv.js": 261,
+	"./ka": 262,
+	"./ka.js": 262,
+	"./kk": 263,
+	"./kk.js": 263,
+	"./km": 264,
+	"./km.js": 264,
+	"./kn": 265,
+	"./kn.js": 265,
+	"./ko": 266,
+	"./ko.js": 266,
+	"./ku": 267,
+	"./ku.js": 267,
+	"./ky": 268,
+	"./ky.js": 268,
+	"./lb": 269,
+	"./lb.js": 269,
+	"./lo": 270,
+	"./lo.js": 270,
+	"./lt": 271,
+	"./lt.js": 271,
+	"./lv": 272,
+	"./lv.js": 272,
+	"./me": 273,
+	"./me.js": 273,
+	"./mi": 274,
+	"./mi.js": 274,
+	"./mk": 275,
+	"./mk.js": 275,
+	"./ml": 276,
+	"./ml.js": 276,
+	"./mn": 277,
+	"./mn.js": 277,
+	"./mr": 278,
+	"./mr.js": 278,
+	"./ms": 279,
+	"./ms-my": 280,
+	"./ms-my.js": 280,
+	"./ms.js": 279,
+	"./mt": 281,
+	"./mt.js": 281,
+	"./my": 282,
+	"./my.js": 282,
+	"./nb": 283,
+	"./nb.js": 283,
+	"./ne": 284,
+	"./ne.js": 284,
+	"./nl": 285,
+	"./nl-be": 286,
+	"./nl-be.js": 286,
+	"./nl.js": 285,
+	"./nn": 287,
+	"./nn.js": 287,
+	"./pa-in": 288,
+	"./pa-in.js": 288,
+	"./pl": 289,
+	"./pl.js": 289,
+	"./pt": 290,
+	"./pt-br": 291,
+	"./pt-br.js": 291,
+	"./pt.js": 290,
+	"./ro": 292,
+	"./ro.js": 292,
+	"./ru": 293,
+	"./ru.js": 293,
+	"./sd": 294,
+	"./sd.js": 294,
+	"./se": 295,
+	"./se.js": 295,
+	"./si": 296,
+	"./si.js": 296,
+	"./sk": 297,
+	"./sk.js": 297,
+	"./sl": 298,
+	"./sl.js": 298,
+	"./sq": 299,
+	"./sq.js": 299,
+	"./sr": 300,
+	"./sr-cyrl": 301,
+	"./sr-cyrl.js": 301,
+	"./sr.js": 300,
+	"./ss": 302,
+	"./ss.js": 302,
+	"./sv": 303,
+	"./sv.js": 303,
+	"./sw": 304,
+	"./sw.js": 304,
+	"./ta": 305,
+	"./ta.js": 305,
+	"./te": 306,
+	"./te.js": 306,
+	"./tet": 307,
+	"./tet.js": 307,
+	"./tg": 308,
+	"./tg.js": 308,
+	"./th": 309,
+	"./th.js": 309,
+	"./tl-ph": 310,
+	"./tl-ph.js": 310,
+	"./tlh": 311,
+	"./tlh.js": 311,
+	"./tr": 312,
+	"./tr.js": 312,
+	"./tzl": 313,
+	"./tzl.js": 313,
+	"./tzm": 314,
+	"./tzm-latn": 315,
+	"./tzm-latn.js": 315,
+	"./tzm.js": 314,
+	"./ug-cn": 316,
+	"./ug-cn.js": 316,
+	"./uk": 317,
+	"./uk.js": 317,
+	"./ur": 318,
+	"./ur.js": 318,
+	"./uz": 319,
+	"./uz-latn": 320,
+	"./uz-latn.js": 320,
+	"./uz.js": 319,
+	"./vi": 321,
+	"./vi.js": 321,
+	"./x-pseudo": 322,
+	"./x-pseudo.js": 322,
+	"./yo": 323,
+	"./yo.js": 323,
+	"./zh-cn": 324,
+	"./zh-cn.js": 324,
+	"./zh-hk": 325,
+	"./zh-hk.js": 325,
+	"./zh-tw": 326,
+	"./zh-tw.js": 326
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -773,68 +845,9 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 401;
-
-/***/ }),
-
-/***/ 409:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RecordingStorageProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_storage__ = __webpack_require__(411);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var RECORDING_PREFIX = 'RS_RECORD_';
-function makeKey(rec) {
-    return RECORDING_PREFIX + (rec.timestamp | 0);
-}
-var RecordingStorageProvider = /** @class */ (function () {
-    function RecordingStorageProvider(storage) {
-        this.storage = storage;
-    }
-    /* Saves a recording into local storage, using the recording timestamp to
-     * uniquely identify the record. (or updates the record if it already
-     * exists) Returns a promise that resolves to 'true' on success. */
-    RecordingStorageProvider.prototype.save = function (rec) {
-        return this.storage.put(makeKey(rec), JSON.stringify(rec)).then(function () {
-            return true;
-        });
-    };
-    RecordingStorageProvider.prototype.loadAll = function () {
-        var list = [];
-        return this.storage.forEach(function (value, key) {
-            if (key.startsWith(RECORDING_PREFIX)) {
-                list.push(value);
-            }
-        }).then(function () {
-            return value;
-        });
-    };
-    RecordingStorageProvider.prototype.clear = function () {
-        this.storage.clear();
-    };
-    RecordingStorageProvider = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ionic_storage__["b" /* Storage */]) === "function" && _a || Object])
-    ], RecordingStorageProvider);
-    return RecordingStorageProvider;
-    var _a;
-}());
-
-//# sourceMappingURL=recording-storage.js.map
+webpackContext.id = 405;
 
 /***/ })
 
-},[325]);
+},[328]);
 //# sourceMappingURL=main.js.map

@@ -29,7 +29,7 @@ export class RecordingStorageProvider
      * exists) Returns a promise that resolves to 'true' on success. */
     save(rec: Recording) : Promise<any>
     {
-        return this.storage.put(
+        return this.storage.set(
             makeKey(rec),
             JSON.stringify(rec)
         ).then(() => {
@@ -39,14 +39,18 @@ export class RecordingStorageProvider
 
     loadAll() : Promise<Recording[]>
     {
-        let list = [];
+        let recordings = [];
         return this.storage.forEach((value, key) => {
             if (key.startsWith(RECORDING_PREFIX)) {
-                list.push(value);
+                recordings.push(value);
             }
 
         }).then(() => {
-            return <Recording[]>value;
+            return <Recording[]>recordings;
+
+        }).catch(error => {
+            console.log('error loading recordings:', error);
+            return <Recording[]>[];
         });
     }
 

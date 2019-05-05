@@ -175,6 +175,21 @@ export class HomePage
 
         document.addEventListener('keyup', this.keyHandler);
 
+        this.recordingStorage.loadAll().then(
+            recordings => {
+                console.log('loaded recordings:', recordings);
+            }
+        );
+
+        this.recordingStorage.save({
+            timestamp: 0,
+            samples: [1, 2, 3],
+            comment: 'This is a test',
+
+        }).catch(error => {
+            console.log('error saving:', error);
+        });
+
         /*let tick = () => {
             setTimeout(tick, 500);
         }
