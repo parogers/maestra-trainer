@@ -6,11 +6,20 @@
 
 <ion-content padding>
 
-  <button ion-button full class="click-button" (click)="handleClicked()">
+  <button
+     ion-button
+     full
+     class="click-button"
+     (click)="handleClicked()">
     Tap here
   </button>
 
-  <button ion-button full [disabled]="true" color="primary">
+  <button
+     ion-button
+     full
+     color="primary"
+     [disabled]="!isRecording"
+     (click)="handleStopClicked()">
     Stop
   </button>
 
