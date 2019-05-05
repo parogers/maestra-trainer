@@ -6,20 +6,12 @@
 
 <ion-content padding>
 
-  <button ion-button full [disabled]="true" color="primary">
-    Stop
-  </button>
-
-  <!--<div
-     id="click-area"
-     onkeypress="handleKeyPress()"
-     (click)="handleClicked()"
-     >
-    {{ beatsPerMinute }}
-    </div>-->
-
   <button ion-button full class="click-button" (click)="handleClicked()">
     Tap here
+  </button>
+
+  <button ion-button full [disabled]="true" color="primary">
+    Stop
   </button>
 
   <div class="chart-area">

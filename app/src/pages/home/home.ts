@@ -71,23 +71,30 @@ export class HomePage
 {
     private beatsPerMinute: number = 0;
     private window: SlidingWindow = null;
-    @ViewChild('chart') private chartCanvas;
+    private longWindow: SlidingWindow = null;
+    @ViewChild('chart')
+    private chartCanvas;
     private chart: Chart = null;
     private startTime: number = 0;
     private maxSamples: number = 20;
     private averageBPM: number = 0;
+    private sampleCount: number = 0;
+
+    private keyHandler: any;
+
+    private data: any;
+    private avgData: any;
 
     constructor(public navCtrl: NavController)
     {
         this.window = new SlidingWindow({
-            sampleLength: 8,
+            sampleLength: 4,
             timeLength: 5,
         });
         this.longWindow = new SlidingWindow({
             sampleLength: 16,
             timeLength: 12,
         });
-        this.sampleCount = 0;
     }
 
     setupChart()

@@ -41,7 +41,7 @@ webpackEmptyAsyncContext.id = 150;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TabsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__about_about__ = __webpack_require__(195);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__contact_contact__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__review_review__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__home_home__ = __webpack_require__(197);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -59,11 +59,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var TabsPage = /** @class */ (function () {
     function TabsPage() {
         this.tab1Root = __WEBPACK_IMPORTED_MODULE_3__home_home__["a" /* HomePage */];
-        this.tab2Root = __WEBPACK_IMPORTED_MODULE_1__about_about__["a" /* AboutPage */];
-        this.tab3Root = __WEBPACK_IMPORTED_MODULE_2__contact_contact__["a" /* ContactPage */];
+        this.tab2Root = __WEBPACK_IMPORTED_MODULE_2__review_review__["a" /* ReviewPage */];
+        this.tab3Root = __WEBPACK_IMPORTED_MODULE_1__about_about__["a" /* AboutPage */];
     }
     TabsPage = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/home/peter/maestra-count-training/src/pages/tabs/tabs.html"*/'<ion-tabs>\n  <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>\n  <ion-tab [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>\n  <ion-tab [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/home/peter/maestra-count-training/src/pages/tabs/tabs.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/home/peter/maestra-trainer/app/src/pages/tabs/tabs.html"*/'<ion-tabs>\n  <ion-tab [root]="tab1Root" tabIcon="stopwatch"></ion-tab>\n  <ion-tab [root]="tab2Root" tabIcon="play"></ion-tab>\n  <ion-tab [root]="tab3Root" tabIcon="information-circle"></ion-tab>\n</ion-tabs>\n'/*ion-inline-end:"/home/peter/maestra-trainer/app/src/pages/tabs/tabs.html"*/
         }),
         __metadata("design:paramtypes", [])
     ], TabsPage);
@@ -98,7 +98,7 @@ var AboutPage = /** @class */ (function () {
     }
     AboutPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-about',template:/*ion-inline-start:"/home/peter/maestra-count-training/src/pages/about/about.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      About\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"/home/peter/maestra-count-training/src/pages/about/about.html"*/
+            selector: 'page-about',template:/*ion-inline-start:"/home/peter/maestra-trainer/app/src/pages/about/about.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      About this app\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n\n</ion-content>\n'/*ion-inline-end:"/home/peter/maestra-trainer/app/src/pages/about/about.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
     ], AboutPage);
@@ -113,7 +113,7 @@ var AboutPage = /** @class */ (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContactPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReviewPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(34);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -127,20 +127,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-var ContactPage = /** @class */ (function () {
-    function ContactPage(navCtrl) {
+var ReviewPage = /** @class */ (function () {
+    function ReviewPage(navCtrl) {
         this.navCtrl = navCtrl;
     }
-    ContactPage = __decorate([
+    ReviewPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-contact',template:/*ion-inline-start:"/home/peter/maestra-count-training/src/pages/contact/contact.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Contact\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <ion-list-header>Follow us on Twitter</ion-list-header>\n    <ion-item>\n      <ion-icon name="ionic" item-start></ion-icon>\n      @ionicframework\n    </ion-item>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/peter/maestra-count-training/src/pages/contact/contact.html"*/
+            selector: 'page-review',template:/*ion-inline-start:"/home/peter/maestra-trainer/app/src/pages/review/review.html"*/'<ion-header>\n  <ion-navbar>\n    <ion-title>\n      Review\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  ...\n</ion-content>\n'/*ion-inline-end:"/home/peter/maestra-trainer/app/src/pages/review/review.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
-    ], ContactPage);
-    return ContactPage;
+    ], ReviewPage);
+    return ReviewPage;
 }());
 
-//# sourceMappingURL=contact.js.map
+//# sourceMappingURL=review.js.map
 
 /***/ }),
 
@@ -213,19 +213,20 @@ var HomePage = /** @class */ (function () {
         this.navCtrl = navCtrl;
         this.beatsPerMinute = 0;
         this.window = null;
+        this.longWindow = null;
         this.chart = null;
         this.startTime = 0;
         this.maxSamples = 20;
         this.averageBPM = 0;
+        this.sampleCount = 0;
         this.window = new SlidingWindow({
-            sampleLength: 8,
+            sampleLength: 4,
             timeLength: 5,
         });
         this.longWindow = new SlidingWindow({
             sampleLength: 16,
             timeLength: 12,
         });
-        this.sampleCount = 0;
     }
     HomePage.prototype.setupChart = function () {
         this.avgData = [{
@@ -342,12 +343,11 @@ var HomePage = /** @class */ (function () {
     ], HomePage.prototype, "chartCanvas", void 0);
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/home/peter/maestra-count-training/src/pages/home/home.html"*/'<!--<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header> -->\n\n<ion-content padding>\n\n  <button ion-button full [disabled]="true" color="primary">\n    Stop\n  </button>\n\n  <!--<div\n     id="click-area"\n     onkeypress="handleKeyPress()"\n     (click)="handleClicked()"\n     >\n    {{ beatsPerMinute }}\n    </div>-->\n\n  <button ion-button full class="click-button" (click)="handleClicked()">\n    Tap here\n  </button>\n\n  <div class="chart-area">\n    <canvas #chart width="100" height="100">\n    </canvas>\n  </div>\n\n  <div>\n    Average BPM: {{ averageBPM }}\n  </div>\n  \n</ion-content>\n'/*ion-inline-end:"/home/peter/maestra-count-training/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/home/peter/maestra-trainer/app/src/pages/home/home.html"*/'<!--<ion-header>\n  <ion-navbar>\n    <ion-title>Home</ion-title>\n  </ion-navbar>\n</ion-header> -->\n\n<ion-content padding>\n\n  <button ion-button full class="click-button" (click)="handleClicked()">\n    Tap here\n  </button>\n\n  <button ion-button full [disabled]="true" color="primary">\n    Stop\n  </button>\n\n  <div class="chart-area">\n    <canvas #chart width="100" height="100">\n    </canvas>\n  </div>\n\n  <div>\n    Average BPM: {{ averageBPM }}\n  </div>\n  \n</ion-content>\n'/*ion-inline-end:"/home/peter/maestra-trainer/app/src/pages/home/home.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */]])
     ], HomePage);
     return HomePage;
-    var _a;
 }());
 
 //# sourceMappingURL=home.js.map
@@ -378,7 +378,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_component__ = __webpack_require__(391);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_about_about__ = __webpack_require__(195);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_contact_contact__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_review_review__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pages_home_home__ = __webpack_require__(197);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_tabs_tabs__ = __webpack_require__(194);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_status_bar__ = __webpack_require__(190);
@@ -407,7 +407,7 @@ var AppModule = /** @class */ (function () {
             declarations: [
                 __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* MyApp */],
                 __WEBPACK_IMPORTED_MODULE_4__pages_about_about__["a" /* AboutPage */],
-                __WEBPACK_IMPORTED_MODULE_5__pages_contact_contact__["a" /* ContactPage */],
+                __WEBPACK_IMPORTED_MODULE_5__pages_review_review__["a" /* ReviewPage */],
                 __WEBPACK_IMPORTED_MODULE_6__pages_home_home__["a" /* HomePage */],
                 __WEBPACK_IMPORTED_MODULE_7__pages_tabs_tabs__["a" /* TabsPage */]
             ],
@@ -421,7 +421,7 @@ var AppModule = /** @class */ (function () {
             entryComponents: [
                 __WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* MyApp */],
                 __WEBPACK_IMPORTED_MODULE_4__pages_about_about__["a" /* AboutPage */],
-                __WEBPACK_IMPORTED_MODULE_5__pages_contact_contact__["a" /* ContactPage */],
+                __WEBPACK_IMPORTED_MODULE_5__pages_review_review__["a" /* ReviewPage */],
                 __WEBPACK_IMPORTED_MODULE_6__pages_home_home__["a" /* HomePage */],
                 __WEBPACK_IMPORTED_MODULE_7__pages_tabs_tabs__["a" /* TabsPage */]
             ],
@@ -474,9 +474,11 @@ var MyApp = /** @class */ (function () {
         });
     }
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/home/peter/maestra-count-training/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/home/peter/maestra-count-training/src/app/app.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/home/peter/maestra-trainer/app/src/app/app.html"*/'<ion-nav [root]="rootPage"></ion-nav>\n'/*ion-inline-end:"/home/peter/maestra-trainer/app/src/app/app.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */], __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["e" /* Platform */],
+            __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__["a" /* StatusBar */],
+            __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */]])
     ], MyApp);
     return MyApp;
 }());
