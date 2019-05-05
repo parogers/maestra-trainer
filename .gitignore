@@ -3,3 +3,4 @@ app/node_modules
 app/plugins
 app/platforms
 app/www
+app/.sourcemaps
