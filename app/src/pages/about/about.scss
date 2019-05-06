@@ -1,3 +1,20 @@
-page-about {
+page-about
+{
+    ion-icon.about-me {
+        font-size: 2.5em;
+        vertical-align: middle;
+        margin-right: 0.25em;
+        color: color($colors, primary);
+    }
+    
+    img.github-logo {
+        width: auto;
+        height: 2em; 
+        vertical-align: middle;
+        margin-right: 0.7em;
+    }
 
+    .basic-info-area {
+        margin-bottom: 2em;
+    }
 }
