@@ -1,18 +1,26 @@
 page-review
 {
     ion-scroll {
-        height: 74%;
+        height: 55%;
         margin-bottom: 0.5em;
     }
 
     div.chart-area {
-        height: 25%;
-        padding-top: 0.5em;
-        padding-bottom: 0.5em;
+        height: 40%;
+        margin-top: 1em;
+        margin-left: 1em;
+        margin-right: 1em;
     }
 
     button.selected {
-        border: solid 1px;
-        background: color($colors, secondary);
+        background: color($colors, primary);
+
+        div.item-inner {
+            border-bottom: none !important;
+        }
+
+        ion-label p {
+            color: white;
+        }
     }
 }

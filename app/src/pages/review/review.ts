@@ -30,7 +30,7 @@ export class ReviewPage
     ) {
     }
 
-    ionViewDidLoad()
+    ionViewWillEnter()
     {
         function byTime(r1, r2) {
             if (r1.timestamp < r2.timestamp) return -1;
@@ -40,10 +40,13 @@ export class ReviewPage
 
         this.recordingStorage.loadAll().then(
             recordings => {
-                this.recordings = recordings.sort(byTime);
+                this.recordings = recordings.sort(byTime).reverse();
             }
         );
+    }
 
+    ionViewDidLoad()
+    {
         this.chart = new Chart(this.chartCanvas.nativeElement, {
             type: 'line',
             data: {
@@ -61,10 +64,14 @@ export class ReviewPage
                         position: 'bottom',
                         ticks: {
                             stepSize: 1,
+                            suggestedMin: 0,
                         },
                     }],
                     yAxes: [{
                         type: 'linear',
+                        ticks: {
+                            suggestedMin: 0,
+                        },
                     }],
                 },
             },
