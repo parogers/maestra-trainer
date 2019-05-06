@@ -2,7 +2,14 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Chart } from 'chart.js';
-import { RecordingStorageProvider } from '../../providers/recording-storage';
+import {
+    RecordingStorageProvider,
+    Recording,
+} from '../../providers/recording-storage';
+
+import {
+    AlertController
+} from 'ionic-angular';
 
 /* Returns the current time in seconds */
 function getTime() {
@@ -21,11 +28,18 @@ class SlidingWindow
         this.timeLength = args.timeLength || 5;
     }
 
+    clear() {
+        this.values = [];
+    }
+
     add(timestamp)
     {
-        let start = getTime() - this.timeLength;
+        // Trim the window based on number of samples
         this.values.push(timestamp)
         this.values = this.values.slice(-this.sampleLength);
+
+        // Trim the window based on real-time
+        let start = timestamp - this.timeLength;
         this.values = this.values.filter(
             value => value >= start
         );
@@ -64,6 +78,21 @@ class SlidingWindow
     }
 }
 
+class SampleRecorder
+{
+    public samples: any;
+    public startTime: number;
+
+    constructor() {
+        this.startTime = getTime();
+        this.samples = []
+    }
+
+    addSample() {
+        this.samples.push(getTime() - this.startTime);
+    }
+}
+
 @Component({
     selector: 'page-home',
     templateUrl: 'home.html'
@@ -76,7 +105,6 @@ export class HomePage
     @ViewChild('chart')
     private chartCanvas;
     private chart: Chart = null;
-    private startTime: number = 0;
     private maxSamples: number = 20;
     private averageBPM: number = 0;
     private sampleCount: number = 0;
@@ -86,9 +114,12 @@ export class HomePage
     private data: any;
     private avgData: any;
 
+    private recorder: SampleRecorder = null;
+
     constructor(
         private navCtrl: NavController,
         private recordingStorage: RecordingStorageProvider,
+        private alertCtrl: AlertController,
     )
     {
         this.window = new SlidingWindow({
@@ -99,6 +130,10 @@ export class HomePage
             sampleLength: 16,
             timeLength: 12,
         });
+    }
+
+    get isRecording() {
+        return !!this.recorder;
     }
 
     setupChart()
@@ -164,7 +199,6 @@ export class HomePage
 
     ionViewDidLoad()
     {
-        this.startTime = getTime();
         this.setupChart();
 
         this.keyHandler = event => {
@@ -175,10 +209,11 @@ export class HomePage
 
         document.addEventListener('keyup', this.keyHandler);
 
-        /*let tick = () => {
-            setTimeout(tick, 500);
-        }
-        setTimeout(tick, 500);*/
+        this.recordingStorage.loadAll().then(
+            recordings => {
+                console.log('loaded recordings:', recordings);
+            }
+        );
     }
 
     ionViewDidLeave() {
@@ -213,9 +248,14 @@ export class HomePage
 
     handleClicked()
     {
+        if (!this.isRecording) {
+            this.recorder = new SampleRecorder();
+        }
+        
         let now = getTime()
         this.window.add(now);
         this.longWindow.add(now);
+        this.recorder.addSample();
 
         let freq = this.window.getAverageFrequency();
         let lastPeriod = this.window.getLastPeriod();
@@ -229,5 +269,59 @@ export class HomePage
 
             this.addSampleToChart(bpm, avg);
         }
+    }
+
+    /* Saves the current recording in progress */
+    private saveCurrentRecording(comment: string)
+    {
+        if (!this.isRecording) {
+            return;
+        }
+        return this.recordingStorage.save(
+            this.recorder.startTime,
+            this.recorder.samples,
+            comment,
+        ).catch(error => {
+            console.log('error saving:', error);
+        });
+    }
+
+    /* Stops any recording currently in progress */
+    private stopRecording() {
+        this.recorder = null;
+        this.window.clear();
+        this.longWindow.clear();
+    }
+
+    handleStopClicked()
+    {
+        // Prompt the user to save the recording (with comment)
+        let handleSave = (args) => {
+            this.saveCurrentRecording(
+                args.comment,
+            ).then(() => {
+                this.stopRecording();
+            });
+        };
+        let alert = this.alertCtrl.create({
+            title: 'Confirm',
+            message: 'Save this recording?',
+            inputs: [{
+                name: 'comment',
+                placeholder: 'Enter a comment',
+            }],
+            buttons: [
+                {
+                    text: 'Save',
+                    handler: handleSave,
+                },
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: () => this.stopRecording(),
+                },
+            ],
+        });
+        alert.present();
     }
 }

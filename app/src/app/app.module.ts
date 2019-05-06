@@ -21,7 +21,7 @@ import {
         AboutPage,
         ReviewPage,
         HomePage,
-        TabsPage
+        TabsPage,
     ],
     imports: [
         BrowserModule,
@@ -37,7 +37,7 @@ import {
         AboutPage,
         ReviewPage,
         HomePage,
-        TabsPage
+        TabsPage,
     ],
     providers: [
         StatusBar,
