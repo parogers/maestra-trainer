@@ -56,7 +56,9 @@ export class RecordingStorageProvider
             }
 
         }).then(() => {
-            return <Recording[]>recordings;
+            return <Recording[]>recordings.map(rec => {
+                return JSON.parse(rec);
+            });
 
         }).catch(error => {
             console.log('error loading recordings:', error);

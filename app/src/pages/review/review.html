@@ -1,11 +1,31 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Review
+      Review recordings
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  ...
+<ion-content>
+
+  <ion-scroll
+     scrollY="true"
+     *ngIf="recordings">
+    <ion-list>
+      <button
+         ion-item
+         *ngFor="let rec of recordings"
+         (click)="handleRecordingClicked(rec)"
+         [ngClass]="{ 'selected' : isSelected(rec) }">
+        <p>{{ formatDate(rec) }} ({{ formatDuration(rec) }})</p>
+        <p *ngIf="rec.comment">{{ rec.comment }}</p>
+      </button>
+    </ion-list>
+  </ion-scroll>
+
+  <div class="chart-area">
+    <canvas #chart width="100" height="100">
+    </canvas>
+  </div>
+
 </ion-content>

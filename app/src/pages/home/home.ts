@@ -11,71 +11,13 @@ import {
     AlertController
 } from 'ionic-angular';
 
+import {
+    SlidingWindow,
+} from '../../sliding-window';
+
 /* Returns the current time in seconds */
 function getTime() {
     return (new Date()).getTime()/1000.0;
-}
-
-class SlidingWindow
-{
-    private values: any;
-    private sampleLength: number;
-    private timeLength: number;
-    
-    constructor(args) {
-        this.values = [];
-        this.sampleLength = args.sampleLength || 10;
-        this.timeLength = args.timeLength || 5;
-    }
-
-    clear() {
-        this.values = [];
-    }
-
-    add(timestamp)
-    {
-        // Trim the window based on number of samples
-        this.values.push(timestamp)
-        this.values = this.values.slice(-this.sampleLength);
-
-        // Trim the window based on real-time
-        let start = timestamp - this.timeLength;
-        this.values = this.values.filter(
-            value => value >= start
-        );
-    }
-
-    getAverageFrequency()
-    {
-        let period = this.getAveragePeriod();
-        if (period == 0) {
-            return undefined;
-        }
-        return 1.0/period;
-    }
-
-    getAveragePeriod()
-    {
-        if (this.values.length <= 1) {
-            return null;
-        }
-        
-        let sum = 0;
-        for (let n = 1; n < this.values.length; n++) {
-            sum += this.values[n]-this.values[n-1];
-        }
-        return sum / (this.values.length-1);
-    }
-
-    getLastPeriod()
-    {
-        if (this.values.length < 2) {
-            return undefined;
-        }
-        let last = this.values[this.values.length-1];
-        let slast = this.values[this.values.length-2];
-        return last-slast;
-    }
 }
 
 class SampleRecorder
@@ -130,6 +72,7 @@ export class HomePage
             sampleLength: 16,
             timeLength: 12,
         });
+        //this.recordingStorage.clear();
     }
 
     get isRecording() {
@@ -151,7 +94,6 @@ export class HomePage
             data: {
                 datasets: [
                     {
-                        label: 'bpm',
                         xAxisID: 'x-axis-bpm',
                         yAxisID: 'y-axis-bpm',
                         data: this.data,
@@ -159,7 +101,6 @@ export class HomePage
                         borderWidth: 5,
                     },
                     {
-                        label: 'avg',
                         data: this.avgData,
                         borderColor: 'rgba(0,0,255,0.5)',
                         fill: false,
@@ -169,6 +110,9 @@ export class HomePage
                 ],
             },
             options: {
+                legend: {
+                    display: false,
+                },
                 animation: {
                     duration: 300,
                 },
@@ -208,12 +152,6 @@ export class HomePage
         }
 
         document.addEventListener('keyup', this.keyHandler);
-
-        this.recordingStorage.loadAll().then(
-            recordings => {
-                console.log('loaded recordings:', recordings);
-            }
-        );
     }
 
     ionViewDidLeave() {
