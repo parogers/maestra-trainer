@@ -19,6 +19,7 @@ export class ReviewPage
 {
     private recordings: Recording[] = null;
     private chart: Chart;
+    private selectedRecording: Recording = null;
 
     @ViewChild('chart')
     private chartCanvas;
@@ -85,6 +86,14 @@ export class ReviewPage
             date.getMinutes();
     }
 
+    isSelected(rec)
+    {
+        return (
+            this.selectedRecording &&
+            this.selectedRecording.timestamp === rec.timestamp
+        );
+    }
+
     handleRecordingClicked(rec)
     {
         let window = new SlidingWindow({
@@ -92,6 +101,8 @@ export class ReviewPage
             timeLength: 4,
         });
         let list = [];
+
+        this.selectedRecording = rec;
 
         for (let time of rec.samples)
         {
@@ -102,8 +113,6 @@ export class ReviewPage
             });
         }
         
-        console.log(list);
-
         this.chart.data.datasets = [
             {
                 data: list,

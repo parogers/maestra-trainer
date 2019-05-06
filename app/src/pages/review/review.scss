@@ -10,4 +10,9 @@ page-review
         padding-top: 0.5em;
         padding-bottom: 0.5em;
     }
+
+    button.selected {
+        border: solid 1px;
+        background: color($colors, secondary);
+    }
 }
