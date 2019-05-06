@@ -3,7 +3,14 @@ page-about
     ion-icon.about-me {
         font-size: 2.5em;
         vertical-align: middle;
-        margin-right: 0.25em;
+        margin-right: 0.2em;
+        color: color($colors, primary);
+    }
+    
+    ion-icon.email-me {
+        font-size: 2.3em;
+        vertical-align: middle;
+        margin-right: 0.2em;
         color: color($colors, primary);
     }
     
@@ -11,10 +18,14 @@ page-about
         width: auto;
         height: 2em; 
         vertical-align: middle;
-        margin-right: 0.7em;
+        margin-right: 0.4em;
     }
 
     .basic-info-area {
         margin-bottom: 2em;
+
+        h4 {
+            font-size: 1.5rem;
+        }
     }
 }
