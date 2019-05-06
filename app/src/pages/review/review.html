@@ -1,11 +1,23 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Review
+      Review recordings
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  ...
+
+  <div *ngIf="recordings" class="recordings-area">
+    <ion-list>
+      <button
+         ion-item
+         *ngFor="let rec of recordings"
+         (click)="handleRecordingClicked(rec)">
+        <pre>{{ formatDate(rec) }} ({{ formatDuration(rec) }})</pre>
+        <p *ngIf="rec.comment">{{ rec.comment }}</p>
+      </button>
+    </ion-list>
+  </div>
+
 </ion-content>

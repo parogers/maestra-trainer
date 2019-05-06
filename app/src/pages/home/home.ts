@@ -130,6 +130,7 @@ export class HomePage
             sampleLength: 16,
             timeLength: 12,
         });
+        //this.recordingStorage.clear();
     }
 
     get isRecording() {
@@ -151,7 +152,6 @@ export class HomePage
             data: {
                 datasets: [
                     {
-                        label: 'bpm',
                         xAxisID: 'x-axis-bpm',
                         yAxisID: 'y-axis-bpm',
                         data: this.data,
@@ -159,7 +159,6 @@ export class HomePage
                         borderWidth: 5,
                     },
                     {
-                        label: 'avg',
                         data: this.avgData,
                         borderColor: 'rgba(0,0,255,0.5)',
                         fill: false,
@@ -169,6 +168,9 @@ export class HomePage
                 ],
             },
             options: {
+                legend: {
+                    display: false,
+                },
                 animation: {
                     duration: 300,
                 },
@@ -208,12 +210,6 @@ export class HomePage
         }
 
         document.addEventListener('keyup', this.keyHandler);
-
-        this.recordingStorage.loadAll().then(
-            recordings => {
-                console.log('loaded recordings:', recordings);
-            }
-        );
     }
 
     ionViewDidLeave() {
