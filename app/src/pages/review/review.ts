@@ -131,15 +131,17 @@ export class ReviewPage
 
         for (let time of rec.samples)
         {
+            let avg = 60*window.getAverageFrequency();
             window.add(time);
             list.push({
-                x: time,
-                y: 60*window.getAverageFrequency(),
+                x: +time.toFixed(3),
+                y: +avg.toFixed(1),
             });
         }
         
         this.chart.data.datasets = [
             {
+                label: 'bpm',
                 data: list,
             }
         ]

@@ -163,7 +163,7 @@ export class HomePage
         // Add the new sample point
         this.data.push({
             x: this.sampleCount,
-            y: bpm,
+            y: +bpm.toFixed(1),
         });
         this.sampleCount++;
 
