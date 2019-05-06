@@ -78,6 +78,14 @@ export class ReviewPage
         return this.recordings.length === 0;
     }
 
+    get hasSavedRecordings()
+    {
+        if (this.recordings === null) {
+            return false;
+        }
+        return this.recordings.length > 0;
+    }
+
     ionViewWillEnter()
     {
         // Start loading all recordings from the db
