@@ -1,17 +1,17 @@
-<!--<ion-header>
+<ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>Maestra Trainer</ion-title>
   </ion-navbar>
-</ion-header> -->
+</ion-header>
 
-<ion-content padding>
+<ion-content>
 
   <button
      ion-button
      full
      class="click-button"
      (click)="handleClicked()">
-    Tap here
+    {{ tapButtonText }}
   </button>
 
   <button
@@ -28,8 +28,4 @@
     </canvas>
   </div>
 
-  <div class="average-bpm">
-    Average BPM: {{ averageBPM }}
-  </div>
-  
 </ion-content>
