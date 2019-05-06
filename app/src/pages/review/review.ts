@@ -38,8 +38,8 @@ function createChart(element)
                 yAxes: [{
                     type: 'linear',
                     ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 120,
+                        min: 30,
+                        max: 200,
                     },
                 }],
             },
@@ -129,14 +129,20 @@ export class ReviewPage
 
         this.selectedRecording = rec;
 
+        let count = 0;
         for (let time of rec.samples)
         {
-            let avg = 60*window.getAverageFrequency();
             window.add(time);
-            list.push({
-                x: +time.toFixed(3),
-                y: +avg.toFixed(1),
-            });
+
+            let freq = window.getAverageFrequency();
+            if (freq !== undefined) {
+                let bpm = 60*freq;
+                list.push({
+                    x: count,
+                    y: +bpm.toFixed(1),
+                });
+                count++;
+            }
         }
         
         this.chart.data.datasets = [
