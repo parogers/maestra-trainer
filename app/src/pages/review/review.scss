@@ -1,5 +1,13 @@
-page-contact
+page-review
 {
-    div.recordings-area {
+    ion-scroll {
+        height: 74%;
+        margin-bottom: 0.5em;
+    }
+
+    div.chart-area {
+        height: 25%;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
     }
 }

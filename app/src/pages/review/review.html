@@ -8,7 +8,9 @@
 
 <ion-content padding>
 
-  <div *ngIf="recordings" class="recordings-area">
+  <ion-scroll
+     scrollY="true"
+     *ngIf="recordings">
     <ion-list>
       <button
          ion-item
@@ -18,6 +20,27 @@
         <p *ngIf="rec.comment">{{ rec.comment }}</p>
       </button>
     </ion-list>
+
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+    <p>Hello world</p>
+
+  </ion-scroll>
+
+  <div class="chart-area">
+    <canvas #chart width="100" height="100">
+    </canvas>
   </div>
 
 </ion-content>

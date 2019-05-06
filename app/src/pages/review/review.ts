@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { Chart } from 'chart.js';
 
 import {
     RecordingStorageProvider,
     Recording,
 } from '../../providers/recording-storage';
+
+import {
+    SlidingWindow,
+} from '../../sliding-window';
 
 @Component({
     selector: 'page-review',
@@ -13,6 +18,10 @@ import {
 export class ReviewPage
 {
     private recordings: Recording[] = null;
+    private chart: Chart;
+
+    @ViewChild('chart')
+    private chartCanvas;
     
     constructor(
         private navCtrl: NavController,
@@ -33,7 +42,32 @@ export class ReviewPage
                 this.recordings = recordings.sort(byTime);
             }
         );
-        
+
+        this.chart = new Chart(this.chartCanvas.nativeElement, {
+            type: 'line',
+            data: {
+                datasets: [],
+            },
+            options: {
+                legend: {
+                    display: false,
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        type: 'linear',
+                        position: 'bottom',
+                        ticks: {
+                            stepSize: 1,
+                        },
+                    }],
+                    yAxes: [{
+                        type: 'linear',
+                    }],
+                },
+            },
+        });
     }
 
     formatDuration(rec) {
@@ -51,7 +85,31 @@ export class ReviewPage
             date.getMinutes();
     }
 
-    handleRecordingClicked(rec) {
-        console.log(rec);
+    handleRecordingClicked(rec)
+    {
+        let window = new SlidingWindow({
+            sampleLength: 4,
+            timeLength: 4,
+        });
+        let list = [];
+
+        for (let time of rec.samples)
+        {
+            window.add(time);
+            list.push({
+                x: time,
+                y: 60*window.getAverageFrequency(),
+            });
+        }
+        
+        console.log(list);
+
+        this.chart.data.datasets = [
+            {
+                data: list,
+            }
+        ]
+
+        this.chart.update();
     }
 }
