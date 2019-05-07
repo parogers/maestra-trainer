@@ -23,6 +23,9 @@ function createChart(element)
             legend: {
                 display: false,
             },
+            animation: {
+                duration: 200,
+            },
             responsive: true,
             maintainAspectRatio: false,
             scales: {

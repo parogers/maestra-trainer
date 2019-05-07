@@ -120,7 +120,7 @@ export class HomePage
                     display: false,
                 },
                 animation: {
-                    duration: 300,
+                    duration: 200,
                 },
                 responsive: true,
                 maintainAspectRatio: false,
