@@ -49,7 +49,6 @@ export class HomePage
     private chart: Chart = null;
     private maxSamples: number = 20;
     private averageBPM: number = 0;
-    private sampleCount: number = 0;
 
     private keyHandler: any;
 
@@ -77,6 +76,13 @@ export class HomePage
 
     get isRecording() {
         return !!this.recorder;
+    }
+
+    get tapButtonText()
+    {
+        if (!this.isRecording) return 'TAP TO START';
+        else if (this.averageBPM === 0) return 'TAP THE BEAT';
+        return this.averageBPM + ' BPM';
     }
 
     setupChart()
@@ -161,11 +167,14 @@ export class HomePage
     addSampleToChart(bpm, avg)
     {
         // Add the new sample point
+        let count = 0;
+        if (this.data.length > 0) {
+            count = this.data[this.data.length-1].x + 1;
+        }
         this.data.push({
-            x: this.sampleCount,
-            y: bpm,
+            x: count,
+            y: +bpm.toFixed(1),
         });
-        this.sampleCount++;
 
         // Trim old samples
         if (this.data.length > this.maxSamples) {
@@ -173,7 +182,7 @@ export class HomePage
         }
 
         // Update the (long-term) average line
-        this.avgData[0].x = Math.max(this.sampleCount-this.maxSamples, 0);
+        this.avgData[0].x = Math.max(count-this.maxSamples+1, 0);
         this.avgData[0].y = avg;
         this.avgData[1].x = Math.max(
             this.data[this.data.length-1].x,
@@ -229,6 +238,11 @@ export class HomePage
         this.recorder = null;
         this.window.clear();
         this.longWindow.clear();
+        this.data.splice(0, this.data.length);
+        this.avgData[0].y = 0;
+        this.avgData[1].y = 0;
+        this.chart.update();
+        this.averageBPM = 0;
     }
 
     handleStopClicked()
@@ -254,7 +268,7 @@ export class HomePage
                     handler: handleSave,
                 },
                 {
-                    text: 'Cancel',
+                    text: 'Discard',
                     role: 'cancel',
                     handler: () => this.stopRecording(),
                 },

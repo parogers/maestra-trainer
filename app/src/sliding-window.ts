@@ -31,7 +31,7 @@ export class SlidingWindow
     getAverageFrequency()
     {
         let period = this.getAveragePeriod();
-        if (period == 0) {
+        if (period === 0) {
             return undefined;
         }
         return 1.0/period;
@@ -40,7 +40,7 @@ export class SlidingWindow
     getAveragePeriod()
     {
         if (this.values.length <= 1) {
-            return null;
+            return 0;
         }
         
         let sum = 0;
