@@ -7,8 +7,7 @@ export interface Recording
 {
     // Time of start of recording (local time)
     timestamp: number;
-    // Samples collected during recording. (relative to the recording start
-    // time) Each sample represents a single tap.
+    // Samples collected during recording (inter-tap time periods in seconds)
     samples: any;
     // The user comment attached to this recording
     comment: string;

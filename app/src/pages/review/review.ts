@@ -8,49 +8,32 @@ import {
 } from '../../providers/recording-storage';
 
 import {
-    SlidingWindow,
-} from '../../sliding-window';
+    BeatEstimator,
+    calculateAvg,
+    calculateStddev,
+} from '../../beat-estimator';
 
 const BPM_RANGE_MIN = 60;
 const BPM_RANGE_MAX = 180;
-
-function calculateAvg(samples)
-{
-    let sum = 0;
-    samples.forEach(sample => {
-        sum += sample;
-    });
-    return sum / samples.length;
-}
 
 function calculateStats(rec)
 {
     let averageBPM = 0, accuracy = 0;
 
-    let periods = [];
-    for (let n = 1; n < rec.samples.length; n++) {
-        periods.push(rec.samples[n] - rec.samples[n-1]);
-    }
-
-    if (periods.length > 0)
+    if (rec.samples.length > 0)
     {
-        let avgPeriod = calculateAvg(periods);
-
-        periods = periods.filter(
+        let avgPeriod = calculateAvg(rec.samples);
+        let filtered = rec.samples.filter(
             sample => sample < 3*avgPeriod
         );
 
-        avgPeriod = calculateAvg(periods);
+        avgPeriod = calculateAvg(filtered);
         averageBPM = 60.0/avgPeriod;
 
-        if (periods.length > 1) {
-            let stddev = 0;
-            periods.forEach(period => {
-                stddev += Math.pow(avgPeriod - period, 2)
-            });
-            stddev = Math.sqrt(stddev/(periods.length-1));
-
-            accuracy = (1-stddev/avgPeriod)*100;
+        if (rec.samples.length > 1)
+        {
+            let stddev = calculateStddev(filtered, avgPeriod);
+            accuracy = (1-2*stddev/avgPeriod)*100;
         }
     }
 
@@ -62,7 +45,8 @@ function calculateStats(rec)
 
 function formatDuration(rec) {
     // TODO - handle minutes
-    return Math.round(rec.samples[rec.samples.length-1]) + 's';
+    let seconds = rec.samples.reduce((acc, period) => acc + period);
+    return Math.round(seconds) + 's';
 }
 
 function formatDate(rec)
@@ -99,7 +83,6 @@ function createChart(element)
                     ticks: {
                         stepSize: 1,
                         suggestedMin: 0,
-                        suggestedMax: 10,
                     },
                 }],
                 yAxes: [{
@@ -197,22 +180,13 @@ export class ReviewPage
 
     handleRecordingClicked(info: RecordingInfo)
     {
-        let window = new SlidingWindow({
-            sampleLength: 4,
-            timeLength: 4,
-        });
-        let list = [];
-
         this.selected = info;
-
+        let list = [];
         let count = 0;
-        for (let time of info.recording.samples)
+        for (let period of info.recording.samples)
         {
-            window.add(time);
-
-            let freq = window.getAverageFrequency();
-            if (freq !== undefined) {
-                let bpm = 60*freq;
+            if (period !== 0) {
+                let bpm = 60/period;
                 list.push({
                     x: count,
                     y: +bpm.toFixed(1),
