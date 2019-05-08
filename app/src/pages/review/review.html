@@ -23,7 +23,7 @@
         <p *ngIf="rec.comment">"{{ rec.comment }}"</p>
 
         <div *ngIf="isSelected(rec)">
-          <p>Average BPM: {{ rec.averageBPM }}</p>
+          <p>Average BPM: {{ rec.averageBPM }}&nbsp;&nbsp;[{{ rec.lowerBPM }}&mdash;{{ rec.upperBPM }} BPM]</p>
           <p>Average jitter: {{ rec.averageJitter }}%</p>
           <p>Accuracy: {{ rec.accuracy }}%</p>
         </div>

@@ -29,6 +29,50 @@ export function differences(samples)
     return list;
 }
 
+export function calculateStats(rec)
+{
+    let averageBPM = 0, accuracy = 0, averageJitter = 0, stddevBPM = 0;
+    let lowerBPM = 0, upperBPM = 0;
+
+    if (rec.samples.length > 0)
+    {
+        // Discard long periods that fall well outside of the average value
+        // (these likely represent the user taking a break/adjusting the phone etc)
+        let avgPeriod = calculateAvg(rec.samples);
+        let filtered = rec.samples.filter(
+            sample => sample < 3*avgPeriod
+        );
+
+        // Calculate the (revised) average bpm
+        avgPeriod = calculateAvg(filtered);
+        averageBPM = 60.0/avgPeriod;
+
+        // Calculate the standard deviation to get a sense of accuracy
+        if (rec.samples.length > 1)
+        {
+            let stddev = calculateStddev(filtered, avgPeriod);
+            accuracy = (1-2*stddev/avgPeriod)*100;
+            lowerBPM = 60.0 / (avgPeriod + 2*stddev);
+            upperBPM = 60.0 / (avgPeriod - 2*stddev);
+        }
+
+        // Calculate the average jitter (difference between adjacient periods)
+        averageJitter = 100*calculateAvg(
+            differences(filtered).map(
+                sample => Math.abs(sample)
+            )
+        ) / avgPeriod;
+    }
+
+    return {
+        lowerBPM: lowerBPM,
+        upperBPM: upperBPM,
+        averageBPM: averageBPM,
+        averageJitter: averageJitter,
+        accuracy: accuracy,
+    }
+}
+
 export class BeatEstimator
 {
     // The list of recorded beat times

@@ -8,53 +8,11 @@ import {
 } from '../../providers/recording-storage';
 
 import {
-    BeatEstimator,
-    calculateAvg,
-    calculateStddev,
-    differences,
+    calculateStats,
 } from '../../beat-estimator';
 
 const BPM_RANGE_MIN = 60;
 const BPM_RANGE_MAX = 180;
-
-function calculateStats(rec)
-{
-    let averageBPM = 0, accuracy = 0, averageJitter = 0;
-
-    if (rec.samples.length > 0)
-    {
-        // Discard long periods that fall well outside of the average value
-        // (these likely represent the user taking a break/adjusting the phone etc)
-        let avgPeriod = calculateAvg(rec.samples);
-        let filtered = rec.samples.filter(
-            sample => sample < 3*avgPeriod
-        );
-
-        // Calculate the (revised) average bpm
-        avgPeriod = calculateAvg(filtered);
-        averageBPM = 60.0/avgPeriod;
-
-        // Calculate the standard deviation to get a sense of accuracy
-        if (rec.samples.length > 1)
-        {
-            let stddev = calculateStddev(filtered, avgPeriod);
-            accuracy = (1-2*stddev/avgPeriod)*100;
-        }
-
-        // Calculate the average jitter (difference between adjacient periods)
-        averageJitter = 100*calculateAvg(
-            differences(filtered).map(
-                sample => Math.abs(sample)
-            )
-        ) / avgPeriod;
-    }
-
-    return {
-        averageBPM: averageBPM,
-        averageJitter: averageJitter,
-        accuracy: accuracy,
-    }
-}
 
 function formatDuration(rec) {
     // TODO - handle minutes
@@ -167,6 +125,8 @@ export class ReviewPage
                     averageBPM: Math.round(stats.averageBPM),
                     accuracy: Math.round(stats.accuracy),
                     averageJitter: Math.round(stats.averageJitter),
+                    upperBPM: Math.round(stats.upperBPM),
+                    lowerBPM: Math.round(stats.lowerBPM),
                 };
             }
         );
