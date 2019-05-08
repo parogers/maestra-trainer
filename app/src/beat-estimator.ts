@@ -18,6 +18,17 @@ export function calculateAvg(samples)
     return samples.reduce((acc, sample) => acc + sample) / samples.length;
 }
 
+/* Returns an array of the differences between adjacient samples in the given array */
+export function differences(samples)
+{
+    let list = [];
+
+    for (let n = 1; n < samples.length; n++) {
+        list.push(samples[n] - samples[n-1]);
+    }
+    return list;
+}
+
 export class BeatEstimator
 {
     // The list of recorded beat times
@@ -51,11 +62,7 @@ export class BeatEstimator
             value => value >= start
         );
 
-        let periods = [];
-        for (let n = 1; n < this.timestamps.length; n++) {
-            periods.push(this.timestamps[n] - this.timestamps[n-1]);
-        }
-        this.averagePeriod = calculateAvg(periods);
+        this.averagePeriod = calculateAvg(differences(this.timestamps));
     }
 
     getAverageFrequency()
