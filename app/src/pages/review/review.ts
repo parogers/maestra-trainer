@@ -144,6 +144,14 @@ export class ReviewPage
         this.selected = null;
     }
 
+    ionViewWillLeave()
+    {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = null;
+        }
+    }
+
     isSelected(info: RecordingInfo)
     {
         return (
