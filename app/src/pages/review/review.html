@@ -20,7 +20,13 @@
         (click)="handleRecordingClicked(rec)"
         [ngClass]="{ 'selected' : isSelected(rec) }">
         <p>{{ rec.date }} ({{ rec.duration }})</p>
-        <p *ngIf="rec.comment">{{ rec.comment }}</p>
+        <p *ngIf="rec.comment">"{{ rec.comment }}"</p>
+
+        <div *ngIf="isSelected(rec)">
+          <p>Average BPM: {{ rec.averageBPM }}</p>
+          <p>Accuracy: {{ rec.accuracy }}%</p>
+        </div>
+        
       </button>
     </ion-list>
   </ion-scroll>

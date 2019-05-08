@@ -11,8 +11,57 @@ import {
     SlidingWindow,
 } from '../../sliding-window';
 
+const BPM_RANGE_MIN = 60;
+const BPM_RANGE_MAX = 180;
+
+function calculateAvg(samples)
+{
+    let sum = 0;
+    samples.forEach(sample => {
+        sum += sample;
+    });
+    return sum / samples.length;
+}
+
+function calculateStats(rec)
+{
+    let averageBPM = 0, accuracy = 0;
+
+    let periods = [];
+    for (let n = 1; n < rec.samples.length; n++) {
+        periods.push(rec.samples[n] - rec.samples[n-1]);
+    }
+
+    if (periods.length > 0)
+    {
+        let avgPeriod = calculateAvg(periods);
+
+        periods = periods.filter(
+            sample => sample < 3*avgPeriod
+        );
+
+        avgPeriod = calculateAvg(periods);
+        averageBPM = 60.0/avgPeriod;
+
+        if (periods.length > 1) {
+            let stddev = 0;
+            periods.forEach(period => {
+                stddev += Math.pow(avgPeriod - period, 2)
+            });
+            stddev = Math.sqrt(stddev/(periods.length-1));
+
+            accuracy = (1-stddev/avgPeriod)*100;
+        }
+    }
+
+    return {
+        averageBPM: averageBPM,
+        accuracy: accuracy,
+    }
+}
 
 function formatDuration(rec) {
+    // TODO - handle minutes
     return Math.round(rec.samples[rec.samples.length-1]) + 's';
 }
 
@@ -56,8 +105,8 @@ function createChart(element)
                 yAxes: [{
                     type: 'linear',
                     ticks: {
-                        min: 30,
-                        max: 200,
+                        min: BPM_RANGE_MIN,
+                        max: BPM_RANGE_MAX,
                     },
                 }],
             },
@@ -104,15 +153,7 @@ export class ReviewPage
         return this.recordings.length === 0;
     }
 
-    get hasSavedRecordings()
-    {
-        if (this.recordings === null) {
-            return false;
-        }
-        return this.recordings.length > 0;
-    }
-
-    showRecordings(recordings: Recording[])
+    showRecordingsInfo(recordings: Recording[])
     {
         function byTime(r1, r2) {
             if (r1.timestamp < r2.timestamp) return -1;
@@ -121,11 +162,14 @@ export class ReviewPage
         }
         this.recordings = recordings.sort(byTime).reverse().map(
             rec => {
+                let stats = calculateStats(rec);
                 return {
                     duration: formatDuration(rec),
                     date: formatDate(rec),
                     comment: rec.comment,
                     recording: rec,
+                    averageBPM: Math.round(stats.averageBPM),
+                    accuracy: Math.round(stats.accuracy),
                 };
             }
         );
@@ -136,7 +180,7 @@ export class ReviewPage
         // Start loading all recordings from the db
         this.recordingStorage.loadAll().then(
             recordings => {
-                this.showRecordings(recordings);
+                this.showRecordingsInfo(recordings);
             }
         );
         this.chart = createChart(this.chartCanvas.nativeElement);
