@@ -12,6 +12,21 @@ import {
 } from '../../sliding-window';
 
 
+function formatDuration(rec) {
+    return Math.round(rec.samples[rec.samples.length-1]) + 's';
+}
+
+function formatDate(rec)
+{
+    let date = new Date(rec.timestamp*1000);
+    return '' +
+        date.getFullYear() + '/' +
+        (date.getMonth()+1) + '/' +
+        date.getDate() + ' at ' +
+        date.getHours() + ':' +
+        date.getMinutes();
+}
+
 function createChart(element)
 {
     return new Chart(element, {
@@ -51,15 +66,23 @@ function createChart(element)
 }
 
 
+interface RecordingInfo {
+    date: string;
+    duration: string;
+    comment: string;
+    recording: Recording;
+}
+
+
 @Component({
     selector: 'page-review',
     templateUrl: 'review.html'
 })
 export class ReviewPage
 {
-    private recordings: Recording[] = null;
+    private recordings: RecordingInfo[] = null;
     private chart: Chart;
-    private selectedRecording: Recording = null;
+    private selected: RecordingInfo = null;
 
     @ViewChild('chart')
     private chartCanvas;
@@ -89,48 +112,46 @@ export class ReviewPage
         return this.recordings.length > 0;
     }
 
-    ionViewWillEnter()
+    showRecordings(recordings: Recording[])
     {
-        // Start loading all recordings from the db
         function byTime(r1, r2) {
             if (r1.timestamp < r2.timestamp) return -1;
             if (r1.timestamp > r2.timestamp) return 1;
             return 0;
         }
+        this.recordings = recordings.sort(byTime).reverse().map(
+            rec => {
+                return {
+                    duration: formatDuration(rec),
+                    date: formatDate(rec),
+                    comment: rec.comment,
+                    recording: rec,
+                };
+            }
+        );
+    }
 
+    ionViewWillEnter()
+    {
+        // Start loading all recordings from the db
         this.recordingStorage.loadAll().then(
             recordings => {
-                this.recordings = recordings.sort(byTime).reverse();
+                this.showRecordings(recordings);
             }
         );
         this.chart = createChart(this.chartCanvas.nativeElement);
-        this.selectedRecording = null;
+        this.selected = null;
     }
 
-    formatDuration(rec) {
-        return Math.round(rec.samples[rec.samples.length-1]) + 's';
-    }
-
-    formatDate(rec)
-    {
-        let date = new Date(rec.timestamp*1000);
-        return '' +
-            date.getFullYear() + '/' +
-            (date.getMonth()+1) + '/' +
-            date.getDate() + ' at ' +
-            date.getHours() + ':' +
-            date.getMinutes();
-    }
-
-    isSelected(rec)
+    isSelected(info: RecordingInfo)
     {
         return (
-            this.selectedRecording &&
-            this.selectedRecording.timestamp === rec.timestamp
+            this.selected &&
+            this.selected.recording.timestamp === info.recording.timestamp
         );
     }
 
-    handleRecordingClicked(rec)
+    handleRecordingClicked(info: RecordingInfo)
     {
         let window = new SlidingWindow({
             sampleLength: 4,
@@ -138,10 +159,10 @@ export class ReviewPage
         });
         let list = [];
 
-        this.selectedRecording = rec;
+        this.selected = info;
 
         let count = 0;
-        for (let time of rec.samples)
+        for (let time of info.recording.samples)
         {
             window.add(time);
 
