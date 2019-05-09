@@ -12,26 +12,35 @@ import {
 } from 'ionic-angular';
 
 import {
-    SlidingWindow,
-} from '../../sliding-window';
+    BeatEstimator,
+} from '../../beat-estimator';
 
 /* Returns the current time in seconds */
 function getTime() {
     return (new Date()).getTime()/1000.0;
 }
 
+/* Used to record beats over a period of time */
 class SampleRecorder
 {
+    // The list of time periods between beats
     public samples: any;
     public startTime: number;
+    private lastTapTime: number = undefined;
 
     constructor() {
         this.startTime = getTime();
         this.samples = []
     }
 
-    addSample() {
-        this.samples.push(getTime() - this.startTime);
+    addSample()
+    {
+        let now = getTime();
+
+        if (this.lastTapTime !== undefined) {
+            this.samples.push(now - this.lastTapTime);
+        }
+        this.lastTapTime = now;
     }
 }
 
@@ -42,8 +51,8 @@ class SampleRecorder
 export class HomePage
 {
     private beatsPerMinute: number = 0;
-    private window: SlidingWindow = null;
-    private longWindow: SlidingWindow = null;
+    private window: BeatEstimator = null;
+    private longWindow: BeatEstimator = null;
     @ViewChild('chart')
     private chartCanvas;
     private chart: Chart = null;
@@ -63,11 +72,11 @@ export class HomePage
         private alertCtrl: AlertController,
     )
     {
-        this.window = new SlidingWindow({
+        this.window = new BeatEstimator({
             sampleLength: 4,
             timeLength: 5,
         });
-        this.longWindow = new SlidingWindow({
+        this.longWindow = new BeatEstimator({
             sampleLength: 16,
             timeLength: 12,
         });
@@ -205,15 +214,12 @@ export class HomePage
         this.recorder.addSample();
 
         let freq = this.window.getAverageFrequency();
-        let lastPeriod = this.window.getLastPeriod();
-        if (freq !== undefined && lastPeriod !== undefined)
+        if (freq !== undefined)
         {
             let bpm = 60*freq;
             let avg = 60*this.longWindow.getAverageFrequency();
-            let error = 60*(freq - 1.0/lastPeriod);
 
             this.averageBPM = bpm|0;
-
             this.addSampleToChart(bpm, avg);
         }
     }
