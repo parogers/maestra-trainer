@@ -112,7 +112,7 @@ def generate_ios_icons():
         dest_img.save(dest_path)
 
 
-#generate_android_icons()
-#generate_android_splash()
-#generate_ios_splash()
+generate_android_icons()
+generate_android_splash()
+generate_ios_splash()
 generate_ios_icons()
