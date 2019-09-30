@@ -14,8 +14,7 @@
     </div>
 
     <ion-list>
-      <button
-        ion-item
+      <ion-item
         *ngFor="let rec of recordings"
         (click)="handleRecordingClicked(rec)"
         [ngClass]="{ 'selected' : isSelected(rec) }">
@@ -26,9 +25,16 @@
           <p>Average BPM: {{ rec.averageBPM }}&nbsp;&nbsp;[{{ rec.lowerBPM }}&mdash;{{ rec.upperBPM }} BPM]</p>
           <p>Average jitter: {{ rec.averageJitter }}%</p>
           <p>Accuracy: {{ rec.accuracy }}%</p>
+
+          <button
+            ion-button
+            (click)="handleDeleteClicked(rec)"
+            >
+            Delete
+          </button>
         </div>
         
-      </button>
+      </ion-item>
     </ion-list>
   </ion-scroll>
 

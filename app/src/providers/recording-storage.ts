@@ -44,6 +44,14 @@ export class RecordingStorageProvider
         });
     }
 
+    /* Remove a recording from storage. Returns a promise that resolves
+     * when it's removed. */
+    remove(recording: Recording)
+    {
+        let key = makeKey(recording);
+        return this.storage.remove(key);
+    }
+
     /* Loads all Recording instances from storage and returns them 
      * (via promise) */
     loadAll() : Promise<Recording[]>

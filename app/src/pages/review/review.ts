@@ -1,5 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {
+    NavController,
+    AlertController
+} from 'ionic-angular';
+
 import { Chart } from 'chart.js';
 
 import {
@@ -12,7 +16,7 @@ import {
 } from '../../beat-estimator';
 
 const BPM_RANGE_MIN = 60;
-const BPM_RANGE_MAX = 180;
+const BPM_RANGE_MAX = 200;
 
 function formatDuration(rec) {
     // TODO - handle minutes
@@ -93,6 +97,7 @@ export class ReviewPage
     constructor(
         private navCtrl: NavController,
         private recordingStorage: RecordingStorageProvider,
+        private alertCtrl: AlertController,
     ) {
     }
 
@@ -152,6 +157,30 @@ export class ReviewPage
         }
     }
 
+    private deleteRecording(info: RecordingInfo)
+    {
+        this.recordingStorage.remove(info.recording).then(
+            () => {
+                // Remove from the ion list as well
+                let i = this.recordings.indexOf(info);
+                if (i !== -1)
+                {
+                    this.recordings = this.recordings.slice(0, i).concat(
+                        this.recordings.slice(i+1)
+                    );
+                }
+                // Clear the chart too
+                this.chart.data.datasets = [];
+                this.chart.update();
+            }
+
+        ).catch(
+            error => {
+                console.log('error deleting recording', info)
+            }
+        );
+    }
+
     isSelected(info: RecordingInfo)
     {
         return (
@@ -162,6 +191,9 @@ export class ReviewPage
 
     handleRecordingClicked(info: RecordingInfo)
     {
+        if (this.selected === info) {
+            return;
+        }
         this.selected = info;
         let list = [];
         let count = 0;
@@ -185,5 +217,24 @@ export class ReviewPage
         ]
 
         this.chart.update();
+    }
+
+    handleDeleteClicked(info: RecordingInfo)
+    {
+        let alert = this.alertCtrl.create({
+            title: 'Confirm',
+            message: 'Delete this recording?',
+            buttons: [
+                {
+                    text: 'Delete',
+                    handler: () => this.deleteRecording(info),
+                },
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                },
+            ],
+        });
+        alert.present();
     }
 }
