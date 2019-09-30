@@ -12,15 +12,11 @@ page-review
         margin-right: 1em;
     }
 
-    button.selected {
-        background: color($colors, primary);
+    ion-item.selected {
+        border: solid 3px color($colors, primary);
 
         div.item-inner {
             border-bottom: none !important;
-        }
-
-        ion-label p {
-            color: white;
         }
     }
 
