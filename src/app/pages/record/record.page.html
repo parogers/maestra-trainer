@@ -1,9 +1,30 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>record</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <img src="/assets/imgs/logo.png">
+        <ion-title>Count the Beat</ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+
+    <ion-button
+        class="click-button"
+        (click)="handleClicked()"
+    >
+        {{ tapButtonText }}
+    </ion-button>
+
+    <ion-button
+        color="primary"
+        [disabled]="!isRecording"
+        (click)="handleStopClicked()"
+    >
+        Stop
+    </ion-button>
+
+    <div class="chart-area">
+        <canvas #chart width="100" height="100">
+        </canvas>
+    </div>
 
 </ion-content>

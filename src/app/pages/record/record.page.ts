@@ -18,4 +18,8 @@ export class RecordPage implements OnInit {
     ngOnInit() {
     }
 
+    get tapButtonText() : string {
+        return 'TAP TO START';
+    }
+
 }
