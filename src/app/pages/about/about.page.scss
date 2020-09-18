@@ -3,3 +3,41 @@
  *
  * Copyright 2020 Peter Rogers (peter.rogers@gmail.com)
  */
+
+ion-icon.about-me {
+    font-size: 2.5em;
+    vertical-align: middle;
+    margin-right: 0.2em;
+    color: var(--ion-color-primary);
+}
+
+ion-icon.email-me {
+    font-size: 2.3em;
+    vertical-align: middle;
+    margin-right: 0.2em;
+    color: var(--ion-color-primary);
+}
+
+img.github-logo {
+    width: auto;
+    height: 2em;
+    vertical-align: middle;
+    margin-right: 0.4em;
+}
+
+.basic-info-area {
+    margin-bottom: 2em;
+
+    h4 {
+        font-size: 1.5rem;
+    }
+}
+
+div.logo-area
+{
+    text-align: center;
+    img {
+        width: 8em;
+        height: auto;
+    }
+}
