@@ -11,7 +11,19 @@ const routes: Routes = [
     {
         path: '',
         loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
-    }
+    },
+  {
+    path: 'record',
+    loadChildren: () => import('./pages/record/record.module').then( m => m.RecordPageModule)
+  },
+  {
+    path: 'review',
+    loadChildren: () => import('./pages/review/review.module').then( m => m.ReviewPageModule)
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./pages/about/about.module').then( m => m.AboutPageModule)
+  }
 ];
 @NgModule({
     imports: [
