@@ -3,3 +3,27 @@
  *
  * Copyright 2020 Peter Rogers (peter.rogers@gmail.com)
  */
+
+ion-scroll {
+    height: 55%;
+    margin-bottom: 0.5em;
+}
+
+div.chart-area {
+    height: 40%;
+    margin-top: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+ion-item.selected {
+    border: solid 3px var(--ion-color-primary);
+
+    div.item-inner {
+        border-bottom: none !important;
+    }
+}
+
+div.no-saved-recordings-message {
+    padding: 1em;
+}

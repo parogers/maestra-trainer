@@ -1,9 +1,46 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>review</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>
+            Review recordings
+        </ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+
+    <div>
+        <div class="no-saved-recordings-message" *ngIf="!haveSavedRecordings">
+            <p>Looks like you don't have any saved recordings.</p>
+        </div>
+
+        <div>
+            <div
+                *ngFor="let rec of recordings"
+                (click)="handleRecordingClicked(rec)"
+                [class.selected]="isSelected(rec)"
+            >
+                <p>{{ rec.date }} ({{ rec.duration }})</p>
+                <p *ngIf="rec.comment">"{{ rec.comment }}"</p>
+
+                <div *ngIf="isSelected(rec)">
+                    <p>Average BPM: {{ rec.averageBPM }}&nbsp;&nbsp;[{{ rec.lowerBPM }}&mdash;{{ rec.upperBPM }} BPM]</p>
+                    <p>Average jitter: {{ rec.averageJitter }}%</p>
+                    <p>Accuracy: {{ rec.accuracy }}%</p>
+
+                    <ion-button
+                        (click)="handleDeleteClicked(rec)"
+                    >
+                        Delete
+                    </ion-button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-area">
+        <canvas #chart width="100" height="100">
+        </canvas>
+    </div>
 
 </ion-content>
